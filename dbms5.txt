@@ -1,0 +1,248 @@
+-- SQL Queries for Copy-Paste (Optimized for continuous execution and SELECT *)
+
+-- Experiment 3: SQL CONSTRAINTS - Table Creation
+
+CREATE TABLE Employee (
+    Fname VARCHAR(7) NOT NULL,
+    Minit CHAR,
+    Lname VARCHAR(15) NOT NULL,
+    Ssn CHAR(9) PRIMARY KEY,
+    Bdate DATE,
+    Address VARCHAR(30),
+    Gender CHAR,
+    Salary DECIMAL(10,2),
+    Supper_ssn CHAR(9),
+    Dno INT NOT NULL
+);
+
+CREATE TABLE Department (
+    Dname VARCHAR(15) NOT NULL,
+    Dnumber INT PRIMARY KEY,
+    Mgr_ssn CHAR(9) NOT NULL,
+    FOREIGN KEY (Mgr_ssn) REFERENCES Employee(Ssn)
+);
+
+CREATE TABLE Dept_locations (
+    Dnumber INT NOT NULL,
+    Dlocation VARCHAR(15) NOT NULL,
+    Mgr_start_date DATE,
+    FOREIGN KEY (Dnumber) REFERENCES Department(Dnumber)
+);
+
+CREATE TABLE Projects (
+    Pname VARCHAR(15) NOT NULL UNIQUE,
+    Pnumber INT PRIMARY KEY NOT NULL,
+    Plocation VARCHAR(15),
+    Dnum INT NOT NULL,
+    FOREIGN KEY (Dnum) REFERENCES Department(Dnumber)
+);
+
+CREATE TABLE Works_on (
+    Essn CHAR(9) NOT NULL,
+    Pno INT NOT NULL,
+    Hours DECIMAL(3,1) NOT NULL,
+    PRIMARY KEY (Essn, Pno),
+    FOREIGN KEY (Essn) REFERENCES Employee(Ssn),
+    FOREIGN KEY (Pno) REFERENCES Projects(Pnumber)
+);
+
+CREATE TABLE Dependent (
+    Essn CHAR(9) NOT NULL,
+    Dependent_name VARCHAR(15) NOT NULL,
+    Gender CHAR,
+    Bdate DATE NOT NULL,
+    Relationship VARCHAR(8),
+    PRIMARY KEY (Essn, Dependent_name),
+    FOREIGN KEY (Essn) REFERENCES Employee(Ssn)
+);
+
+
+-- Experiment 3: SQL CONSTRAINTS - Data Insertion
+
+INSERT ALL
+INTO Employee (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) VALUES ('John', 'B', 'Smith', '123456789', TO_DATE('1965-01-09', 'YYYY-MM-DD'), '731 Fondren, Houston, TX', 'M', 30000.00, '333445555', 5)
+INTO Employee (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) VALUES ('Franklin', 'T', 'Wong', '333445555', TO_DATE('1955-12-08', 'YYYY-MM-DD'), '638 Voss, Houston, TX', 'M', 40000.00, '888665555', 5)
+INTO Employee (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) VALUES ('Alicia', 'J', 'Zelaya', '999887777', TO_DATE('1968-01-19', 'YYYY-MM-DD'), '3321 Castle Spring, TX', 'F', 25000.00, '987654321', 4)
+INTO Employee (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) VALUES ('Jennifer', 'S', 'Wallace', '987654321', TO_DATE('1941-09-20', 'YYYY-MM-DD'), '291 Berry Bellaire, TX', 'F', 43000.00, '888665555', 4)
+INTO Employee (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) VALUES ('Ramesh', 'K', 'Narayan', '666884444', TO_DATE('1962-09-15', 'YYYY-MM-DD'), '975 Pine Oak, Humble, TX', 'M', 38000.00, '333445555', 5)
+INTO Employee (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) VALUES ('Joyce', 'A', 'English', '453453453', TO_DATE('1972-07-31', 'YYYY-MM-DD'), '5631 Rice, Houston, TX', 'F', 25000.00, '333445555', 6)
+INTO Employee (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) VALUES ('Ahmad', 'V', 'Jabbar', '987987987', TO_DATE('1969-03-29', 'YYYY-MM-DD'), '980 Dallas, Houston, TX', 'M', 25000.00, '987654321', 4)
+INTO Employee (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) VALUES ('James', 'E', 'Borg', '888665555', TO_DATE('1937-11-10', 'YYYY-MM-DD'), '450 Stone, Houston, TX', 'M', 55000.00, NULL, 1)
+
+INTO Department (Dname, Dnumber, Mgr_ssn, Mgr_start_date) VALUES ('Research', 5, '333445555', TO_DATE('1988-05-22', 'YYYY-MM-DD'))
+INTO Department (Dname, Dnumber, Mgr_ssn, Mgr_start_date) VALUES ('Administration', 4, '987654321', TO_DATE('1995-01-01', 'YYYY-MM-DD'))
+INTO Department (Dname, Dnumber, Mgr_ssn, Mgr_start_date) VALUES ('Headquarters', 1, '888665555', TO_DATE('1981-06-19', 'YYYY-MM-DD'))
+
+INTO Dept_locations (Dnumber, Dlocation) VALUES (5, 'Houston')
+INTO Dept_locations (Dnumber, Dlocation) VALUES (4, 'Stafford')
+INTO Dept_locations (Dnumber, Dlocation) VALUES (5, 'Bellaire')
+INTO Dept_locations (Dnumber, Dlocation) VALUES (1, 'Sugarland')
+INTO Dept_locations (Dnumber, Dlocation) VALUES (5, 'Houston')
+
+INTO Projects (Pname, Pnumber, Plocation, Dnum) VALUES ('ProductX', 1, 'Bellaire', 5)
+INTO Projects (Pname, Pnumber, Plocation, Dnum) VALUES ('ProductY', 2, 'Sugarland', 5)
+INTO Projects (Pname, Pnumber, Plocation, Dnum) VALUES ('ProductZ', 3, 'Houston', 5)
+INTO Projects (Pname, Pnumber, Plocation, Dnum) VALUES ('Computerization', 10, 'Stafford', 4)
+INTO Projects (Pname, Pnumber, Plocation, Dnum) VALUES ('Reorganization', 20, 'Houston', 1)
+INTO Projects (Pname, Pnumber, Plocation, Dnum) VALUES ('Newbenefits', 30, 'Stafford', 4)
+
+INTO Works_on (Essn, Pno, Hours) VALUES ('123456789', 1, 32.5)
+INTO Works_on (Essn, Pno, Hours) VALUES ('123456789', 2, 7.5)
+INTO Works_on (Essn, Pno, Hours) VALUES ('666884444', 3, 40.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('453453453', 1, 20.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('453453453', 2, 20.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('333445555', 2, 10.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('333445555', 3, 10.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('333445555', 10, 10.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('333445555', 20, 10.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('999887777', 30, 30.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('999887777', 10, 10.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('987987987', 10, 35.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('987987987', 30, 5.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('987654321', 30, 20.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('987654321', 20, 15.0)
+INTO Works_on (Essn, Pno, Hours) VALUES ('888665555', 20, 0.0)
+
+INTO Dependent (Essn, Dependent_name, Sex, Bdate, Relationship) VALUES ('333445555', 'Alice', 'F', TO_DATE('1986-04-05', 'YYYY-MM-DD'), 'Daughter')
+INTO Dependent (Essn, Dependent_name, Sex, Bdate, Relationship) VALUES ('333445555', 'Theodore', 'M', TO_DATE('1983-10-25', 'YYYY-MM-DD'), 'Son')
+INTO Dependent (Essn, Dependent_name, Sex, Bdate, Relationship) VALUES ('333445555', 'Joy', 'F', TO_DATE('1958-05-03', 'YYYY-MM-DD'), 'Spouse')
+INTO Dependent (Essn, Dependent_name, Sex, Bdate, Relationship) VALUES ('987654321', 'Abner', 'M', TO_DATE('1942-02-28', 'YYYY-MM-DD'), 'Spouse')
+INTO Dependent (Essn, Dependent_name, Sex, Bdate, Relationship) VALUES ('123456789', 'Michael', 'M', TO_DATE('1988-01-01', 'YYYY-MM-DD'), 'Son')
+INTO Dependent (Essn, Dependent_name, Sex, Bdate, Relationship) VALUES ('123456789', 'Alice', 'F', TO_DATE('1988-12-30', 'YYYY-MM-DD'), 'Daughter')
+INTO Dependent (Essn, Dependent_name, Sex, Bdate, Relationship) VALUES ('123456789', 'Elizabeth', 'F', TO_DATE('1967-05-05', 'YYYY-MM-DD'), 'Spouse')
+SELECT 1 FROM DUAL;
+
+
+-- Experiment 2: DML Commands (Product Table)
+
+CREATE TABLE Product (
+    Product_id VARCHAR(5) PRIMARY KEY,
+    Name VARCHAR(15),
+    Quantity INT,
+    Date_of_purchase DATE
+);
+
+INSERT ALL
+INTO Product (Product_id, Name, Quantity, Date_of_purchase) VALUES ('P_123', 'Samsung TV', 50, TO_DATE('15-02-2018', 'DD-MM-YYYY'))
+INTO Product (Product_id, Name, Quantity, Date_of_purchase) VALUES ('P_124', 'Apple iPhone', 120, TO_DATE('18-03-2018', 'DD-MM-YYYY'))
+INTO Product (Product_id, Name, Quantity, Date_of_purchase) VALUES ('P_132', 'Philips Audio', 100, TO_DATE('13-05-2018', 'DD-MM-YYYY'))
+INTO Product (Product_id, Name, Quantity, Date_of_purchase) VALUES ('P_143', 'Pigeon Grinder', 170, TO_DATE('19-10-2018', 'DD-MM-YYYY'))
+SELECT 1 FROM DUAL;
+
+ALTER TABLE Product ADD Price DECIMAL(10,2);
+
+UPDATE Product SET Price = 15000.00 WHERE Product_id = 'P_123';
+UPDATE Product SET Price = 75000.00 WHERE Product_id = 'P_124';
+UPDATE Product SET Price = 5000.00 WHERE Product_id = 'P_132';
+UPDATE Product SET Price = 3000.00 WHERE Product_id = 'P_143';
+
+SELECT *
+FROM Product
+WHERE Quantity > 120;
+
+UPDATE Product
+SET Name = 'Sony Audio'
+WHERE Name = 'Philips Audio';
+
+DELETE FROM Product
+WHERE Name = 'Samsung TV';
+
+DROP TABLE Product;
+
+
+-- Experiment 4: AGGREGATE FUNCTION
+
+-- 1. Find the sum of salaries of all employees who are working in department number 5
+SELECT SUM(Salary)
+FROM Employee
+WHERE Dno = 5;
+
+-- 2. Get no of employees in the company
+SELECT COUNT(*)
+FROM Employee;
+
+-- 3. Get the number of employees working in department number 4
+SELECT COUNT(*)
+FROM Employee
+WHERE Dno = 4;
+
+-- 4. Get the number of projects available in the company
+SELECT COUNT(*)
+FROM Projects;
+
+-- 5. Retrieve the lowest salary issued to dep no 5
+SELECT MIN(Salary)
+FROM Employee
+WHERE Dno = 5;
+
+-- 6. Get the lowest and highest salary provided by the company
+SELECT MIN(Salary) AS Lowest_Salary, MAX(Salary) AS Highest_Salary
+FROM Employee;
+
+-- 7. Retrieve minimum and maximum hours issued to project no: 2
+SELECT MIN(Hours) AS Minimum_Hours, MAX(Hours) AS Maximum_Hours
+FROM Works_on
+WHERE Pno = 2;
+
+-- 8. Find the average of hours allotted to project no : 10
+SELECT AVG(Hours)
+FROM Works_on
+WHERE Pno = 10;
+
+
+-- Experiment 5: ORDER BY, GROUP BY & HAVING CLAUSE
+
+-- 1. For each department retrieve the department number, no of employees in the department and their average salary
+SELECT Dno, COUNT(*) AS Number_of_Employees, AVG(Salary) AS Average_Salary
+FROM Employee
+GROUP BY Dno;
+
+-- 2. List the fname and lname of all employee in the ascending order of salary
+SELECT Fname, Lname
+FROM Employee
+ORDER BY Salary ASC;
+
+-- 3. Retrieve the dep number and number of projects done in each department
+SELECT Dnum, COUNT(Pnumber) AS Number_of_Projects
+FROM Projects
+GROUP BY Dnum;
+
+-- 4. List the number of employees in each project, only include projects having more than 2 employees
+SELECT Pno, COUNT(Essn) AS Number_of_Employees
+FROM Works_on
+GROUP BY Pno
+HAVING COUNT(Essn) > 2;
+
+-- 5. Retrieve the number of projects allotted for the location, select only the location ‘stafford’
+SELECT Plocation, COUNT(Pnumber) AS Number_of_Projects
+FROM Projects
+WHERE Plocation = 'Stafford'
+GROUP BY Plocation;
+
+
+-- Queries to view table constraints in Oracle (for verification)
+
+-- To list all constraints for a specific table (e.g., 'EMPLOYEE')
+SELECT constraint_name, constraint_type, search_condition, r_constraint_name
+FROM user_constraints
+WHERE table_name = 'EMPLOYEE';
+
+-- To see which columns are involved in each constraint for a specific table (e.g., 'EMPLOYEE')
+SELECT ucc.column_name, uc.constraint_name, uc.constraint_type
+FROM user_cons_columns ucc
+JOIN user_constraints uc ON ucc.constraint_name = uc.constraint_name
+WHERE ucc.table_name = 'EMPLOYEE'
+ORDER BY uc.constraint_type, ucc.column_name;
+
+-- Repeat the above queries for other tables as needed (e.g., 'DEPARTMENT', 'PROJECTS', etc.)
+-- Example for DEPARTMENT table:
+SELECT constraint_name, constraint_type, search_condition, r_constraint_name
+FROM user_constraints
+WHERE table_name = 'DEPARTMENT';
+
+SELECT ucc.column_name, uc.constraint_name, uc.constraint_type
+FROM user_cons_columns ucc
+JOIN user_constraints uc ON ucc.constraint_name = uc.constraint_name
+WHERE ucc.table_name = 'DEPARTMENT'
+ORDER BY uc.constraint_type, ucc.column_name;
+
